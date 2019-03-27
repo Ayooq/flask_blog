@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Создание поста
+{% endblock %}
+
+{% block content_title %}
+  Новый пост
+{% endblock %}
+
+{% block content_body %}
+  <form action="{{ url_for('posts.create_post') }}" method="post">
+
+    {% for field in form %}
+      <div class="form-group align-items-center">
+        {{ field.label(class='col-form-label col-form-label-lg col-auto') }}
+        {{ field(class='form-control form-control-lg col-auto') }}
+      </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-dark">Опубликовать</button>
+  </form>
+{% endblock %}

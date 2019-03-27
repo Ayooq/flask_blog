@@ -1,0 +1,76 @@
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- <link rel="icon" href="../../../../favicon.ico"> -->
+
+    <title>Вход</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+
+    <link href="{{ url_for('static', filename='css/signin.css') }}" rel="stylesheet">
+
+    <script type="text/javascript" name="AVAST_PAM_submitInjector">
+      (function () {
+        var f = document.querySelectorAll("form")[0]; // eslint-disable-line no-undef
+        if (!f._avast_submit) {
+          f._avast_submit = f.submit;
+        }
+        try {
+          Object.defineProperty(f, "submit", {
+            get: function () {
+              return function (prev_submit) {
+                prev_submit.call(this);
+
+                if (this._avast_inside_submit) {
+                  return;
+                }
+                this._avast_inside_submit = true;
+
+                var evt = document.createEvent("CustomEvent");
+                evt.initEvent("scriptsubmit", true, true); // bubbling & cancelable
+                this.dispatchEvent(evt);
+
+                delete this._avast_inside_submit;
+              }.bind(this, this._avast_submit);
+            },
+            set: function (submitFunc) {
+              this._avast_submit = submitFunc;
+            }
+          });
+        }
+        catch (ex) {
+          // ignored
+        }
+      })();
+    </script>
+  </head>
+
+  <body class="text-center">
+    {% from "security/_macros.html" import render_field_with_errors, render_field %}
+
+    <form class="form-signin AVAST_PAM_loginform" action="{{ url_for_security('login') }}" method="POST" name="login_user_form">
+      <img src="{{ url_for('static', filename='img/python-logo.svg') }}" alt="" width="144" height="144">
+      {% include "security/_messages.html" %}
+      <h1 class="h3 mb-3 font-weight-normal">Войдите в свой аккаунт</h1>
+      <div class="mb-2">{{ login_user_form.hidden_tag() }}</div>
+
+      {{ render_field(login_user_form.email, class='form-control', placeholder='Адрес электронной почты') }}
+      {{ render_field(login_user_form.password, class='form-control', placeholder='Пароль') }}
+
+      <div class="checkbox pt-2">
+        <label>
+          {{ render_field_with_errors(login_user_form.remember, class='ml-2') }}
+        </label>
+      </div>
+
+      {{ render_field(login_user_form.submit, class='btn btn-lg btn-success btn-block') }}
+      
+    </form>
+  </body>
+
+</html>
